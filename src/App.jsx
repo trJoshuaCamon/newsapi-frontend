@@ -5,7 +5,10 @@ import { Container, Paper, Typography } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
+import Navbar from "./components/Navbar";
+
 import "./App.css";
+import SearchBar from "./components/SearchBar";
 
 export default function App() {
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
@@ -34,6 +37,8 @@ export default function App() {
     <>
       <ThemeProvider theme={appTheme}>
         <Paper elevation={0} square>
+          <Navbar />
+          <SearchBar />
           <ThemeSwitch
             themeMode={themeMode}
             handleThemeMode={handleThemeMode}
