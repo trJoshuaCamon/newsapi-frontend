@@ -1,24 +1,21 @@
 import { useState, useEffect } from "react";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
-import ThemeSwitch from "./components/ThemeSwitch";
-import { Container, Paper, Typography } from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
+import { Container, Paper, Typography, Box } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
 import Navbar from "./components/Navbar";
 
 import "./App.css";
-import SearchBar from "./components/SearchBar";
+import MainContent from "./components/MainContent";
+import Sidebar from "./components/Sidebar";
 
 export default function App() {
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
   const [themeMode, setThemeMode] = useState(() => {
-    // Load from localStorage or fallback to system preference
     const storedTheme = localStorage.getItem("themeMode");
     return storedTheme ? JSON.parse(storedTheme) : prefersDarkMode;
   });
 
-  // Store the theme mode in localStorage
   useEffect(() => {
     localStorage.setItem("themeMode", JSON.stringify(themeMode));
   }, [themeMode]);
@@ -33,21 +30,56 @@ export default function App() {
     setThemeMode(!themeMode);
   }
 
-  return (
-    <>
-      <ThemeProvider theme={appTheme}>
-        <Paper elevation={0} square>
-          <Navbar />
-          <SearchBar />
-          <ThemeSwitch
-            themeMode={themeMode}
-            handleThemeMode={handleThemeMode}
-          />
+  const isMdScreen = useMediaQuery("(max-width:960px)");
 
-          <h1>Vite + React</h1>
-          <p>Click on the Vite and React logos to learn more</p>
-        </Paper>
-      </ThemeProvider>
-    </>
+  return (
+    <ThemeProvider theme={appTheme}>
+      <Paper
+        elevation={0}
+        square
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          minHeight: "100vh", // Removed fixed height
+        }}
+      >
+        <Navbar themeMode={themeMode} handleThemeMode={handleThemeMode} />
+
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: isMdScreen ? "column-reverse" : "row",
+            flex: 1,
+            overflow: "hidden",
+          }}
+        >
+          {/* Main Content */}
+          <Box
+            sx={{
+              flex: isMdScreen ? 1 : 4,
+              overflowY: "auto",
+              padding: "20px",
+              backgroundColor: "#f5f5f5",
+            }}
+          >
+            <MainContent />
+          </Box>
+
+          {/* Sidebar */}
+          <Box
+            sx={{
+              flex: 1, // Ensures sidebar takes up full width on medium screens
+              minWidth: "300px",
+              minHeight: "100vh", // Prevents shrinking
+              overflowY: "auto",
+              padding: "20px",
+              backgroundColor: "#e0e0e0",
+            }}
+          >
+            <Sidebar />
+          </Box>
+        </Box>
+      </Paper>
+    </ThemeProvider>
   );
 }
