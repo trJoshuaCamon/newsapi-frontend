@@ -70,7 +70,7 @@ export default function App() {
             sx={{
               flex: 1, // Ensures sidebar takes up full width on medium screens
               minWidth: "300px",
-              minHeight: "100vh", // Prevents shrinking
+              minHeight: isMdScreen ? "auto" : "100vh", // Prevents shrinking
               overflowY: "auto",
               padding: "20px",
               backgroundColor: "#e0e0e0",

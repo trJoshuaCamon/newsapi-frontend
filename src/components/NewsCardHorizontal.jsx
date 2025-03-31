@@ -18,13 +18,14 @@ function NewsCardHorizantal() {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        minHeight: "100vh",
+        // minHeight: "100vh",
         backgroundColor: "#f3f4f6",
+        marginBlock: "40px",
       }}
     >
       <Card
         style={{
-          maxWidth: "900px",
+          // maxWidth: "900px",
           width: "100%",
           display: "grid",
           gridTemplateColumns: isMediumScreen ? "1fr" : "1fr 1fr",

@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, Stack } from "@mui/material";
 import SpeechToText from "./SpeechToText"; // Example child component
 import HeadArticles from "../sections/HeadArticles";
 import NewsCardHorizontal from "./NewsCardHorizontal";
@@ -9,7 +9,18 @@ const MainContent = () => {
   return (
     <Box>
       <NewsCardHorizontal />
-      <NewsCardVertical />
+      <Stack
+        direction={{ xs: "column", md: "row" }}
+        spacing={0}
+        flexWrap="wrap"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <NewsCardVertical  />
+        <NewsCardVertical  />
+        <NewsCardVertical  />
+        <NewsCardVertical  />
+      </Stack>
       {/* <HeadArticles /> */}
       {/* <Typography variant="h4" gutterBottom>
         Main Content Area
