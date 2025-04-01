@@ -78,6 +78,10 @@ const NewsCarousel = ({ label, passedArticles }) => {
               width: "100%",
               alignItems: "center",
               paddingBottom: "30px",
+              scrollbarWidth: "none", // For Firefox
+              "&::-webkit-scrollbar": {
+                display: "none", // For Chrome, Safari, Edge
+              },
             }}
             ref={scrollContainerRef}
           >
