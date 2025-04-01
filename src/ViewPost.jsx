@@ -10,7 +10,7 @@ import {
 
 import CircularProgress from "@mui/material/CircularProgress";
 
-// import { useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import BackButton from "./components/BackButton";
 
@@ -23,10 +23,30 @@ const stackProps = {
   alignItems: "center",
 };
 
+const img_placeholder =
+  "https://community.softr.io/uploads/db9110/original/2X/7/74e6e7e382d0ff5d7773ca9a87e6f6f8817a68a6.jpeg";
+
+const COOKIE_NAME = "news_articles";
+
 const ViewPost = () => {
   const location = useLocation();
   const [content, setContent] = React.useState(null);
-  const { article } = location.state || {}; // Safely access state
+  const { id, category } = useParams();
+
+  // First, check if the article is available in location.state
+  let article = location.state?.article;
+
+  // If no article is found in location.state, fall back to localStorage
+  if (!article) {
+    const storedData = JSON.parse(localStorage.getItem(COOKIE_NAME));
+
+    if (storedData && storedData[category] && id) {
+      // Directly access the correct category and find the article by ID
+      article = storedData[category].find(
+        (item) => item.articleID === id // Compare only with id as stored
+      );
+    }
+  }
 
   useEffect(() => {
     // Fetch article content
@@ -62,9 +82,9 @@ const ViewPost = () => {
     }
   );
 
-  fetch("http://localhost:5000/article?url=" + encodeURIComponent(article.url))
-    .then((res) => res.json())
-    .then((data) => console.log("Full Content:", data.content));
+  fetch(
+    "http://localhost:5000/article?url=" + encodeURIComponent(article.url)
+  ).then((res) => res.json());
 
   if (!article) {
     // Check if article is null or undefined
@@ -74,18 +94,6 @@ const ViewPost = () => {
       </Box>
     );
   }
-
-  // async function getFullArticleContent(url) {
-  //   try {
-  //     const response = await fetch(url);
-  //     const text = await response.text();
-  //     console.log(text); // The full HTML content of the page
-  //   } catch (error) {
-  //     console.error("Error fetching article:", error);
-  //   }
-  // }
-
-  // getFullArticleContent(article.url);
 
   return (
     <Box {...stackProps}>
@@ -109,7 +117,7 @@ const ViewPost = () => {
           >
             <CardMedia
               component="img"
-              image={article.urlToImage}
+              image={article.urlToImage || img_placeholder}
               alt={article.title}
               sx={{
                 objectFit: "contain", // Ensures the whole image is visible without cropping
@@ -152,7 +160,7 @@ const ViewPost = () => {
               textIndent: "3.5em",
             }}
           >
-            {content}
+            {content ? content : "No description available."}
           </Typography>
         </Grid>
       </Grid>

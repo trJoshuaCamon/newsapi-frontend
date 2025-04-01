@@ -12,6 +12,7 @@ import Navbar from "./components/Navbar";
 import "./App.css";
 import MainContent from "./components/MainContent";
 import Sidebar from "./components/Sidebar";
+import { Category } from "@mui/icons-material";
 
 const API_KEY = import.meta.env.VITE_NEWS_API_KEY;
 const PAGE_SIZE = 100;
@@ -114,22 +115,29 @@ export default function App() {
         const dataTechnology = await responseTechnology.json();
 
         // Add IDs to articles
-        const addIdsToArticles = (articles) => {
+        const addIdsToArticles = (articles, category) => {
           return articles.map((article, index) => ({
             ...article,
-            articleID: `${index + 1}`,
+            articleID: `${index + 1}`, // Unique ID within the category
+            category: category, // Explicitly set the category
           }));
         };
 
         const fetchedArticles = {
-          topHeadlines: addIdsToArticles(dataTopHeadlines.articles),
-          business: addIdsToArticles(dataBusiness.articles),
-          entertainment: addIdsToArticles(dataEntertainment.articles),
-          general: addIdsToArticles(dataGeneral.articles),
-          health: addIdsToArticles(dataHealth.articles),
-          science: addIdsToArticles(dataScience.articles),
-          sports: addIdsToArticles(dataSports.articles),
-          technology: addIdsToArticles(dataTechnology.articles),
+          topHeadlines: addIdsToArticles(
+            dataTopHeadlines.articles,
+            "topHeadlines"
+          ),
+          business: addIdsToArticles(dataBusiness.articles, "business"),
+          entertainment: addIdsToArticles(
+            dataEntertainment.articles,
+            "entertainment"
+          ),
+          general: addIdsToArticles(dataGeneral.articles, "general"),
+          health: addIdsToArticles(dataHealth.articles, "health"),
+          science: addIdsToArticles(dataScience.articles, "science"),
+          sports: addIdsToArticles(dataSports.articles, "sports"),
+          technology: addIdsToArticles(dataTechnology.articles, "technology"),
         };
 
         localStorage.setItem(COOKIE_NAME, JSON.stringify(fetchedArticles));
@@ -223,7 +231,7 @@ export default function App() {
                   path="/"
                   element={<MainContent allArticles={allArticles} />}
                 />
-                <Route path="/article/:id" element={<ViewPost />} />
+                <Route path="/article/:category/:id" element={<ViewPost />} />
 
                 {/* <Route path="*" element={<MainContent />} /> */}
                 {/* <Route path="/new" element={<NewPage />} /> */}

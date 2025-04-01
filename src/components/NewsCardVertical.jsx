@@ -15,6 +15,7 @@ export default function NewsCardVertical({ article }) {
     urlToImage = null,
     url = "#",
     articleID,
+    category,
   } = article;
 
   const img_placeholder =
@@ -27,7 +28,10 @@ export default function NewsCardVertical({ article }) {
   const navigate = useNavigate();
 
   const handleCardClick = () => {
-    navigate(`/article/${articleID}`, { state: { article }, replace: true });
+    navigate(`/article/${category}/${articleID}`, {
+      state: { article },
+      replace: true,
+    });
   };
 
   React.useEffect(() => {

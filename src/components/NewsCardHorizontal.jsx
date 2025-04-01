@@ -17,6 +17,7 @@ function NewsCardHorizontal({ article }) {
     urlToImage = null, // Allowing it to be null initially
     url = "#",
     articleID,
+    category,
   } = article;
   const theme = useTheme();
   const isMediumScreen = useMediaQuery(theme.breakpoints.down("md"));
@@ -40,7 +41,10 @@ function NewsCardHorizontal({ article }) {
 
   // Navigate function when the card is clicked
   const handleCardClick = () => {
-    navigate(`/article/${articleID}`, { state: { article }, replace: true });
+    navigate(`/article/${category}/${articleID}`, {
+      state: { article },
+      replace: true,
+    });
   };
 
   React.useEffect(() => {
