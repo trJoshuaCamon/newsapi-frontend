@@ -9,7 +9,7 @@ import {
 import { ArrowBack, ArrowForward } from "@mui/icons-material";
 import NewsCardVertical from "./NewsCardVertical";
 
-const NewsCarousel = ({ remainingArticles }) => {
+const NewsCarousel = ({ label, passedArticles }) => {
   // Reference to the Box containing the articles
   const scrollContainerRef = useRef(null);
 
@@ -36,10 +36,10 @@ const NewsCarousel = ({ remainingArticles }) => {
   return (
     <Box sx={{ width: "100%", position: "relative" }}>
       <Typography variant="h4" sx={{ marginBlock: "20px" }}>
-        Latest Articles
+        {label}
       </Typography>
 
-      {remainingArticles.length > 0 ? (
+      {passedArticles.length > 0 ? (
         <Box sx={{ position: "relative" }}>
           {/* Left scroll button */}
           <IconButton
@@ -82,7 +82,7 @@ const NewsCarousel = ({ remainingArticles }) => {
                 width: "max-content",
               }}
             >
-              {remainingArticles.map((article, index) => (
+              {passedArticles.map((article, index) => (
                 <NewsCardVertical key={index} article={article} />
               ))}
             </Stack>

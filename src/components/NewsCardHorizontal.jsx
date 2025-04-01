@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Card,
   CardContent,
@@ -13,12 +13,27 @@ function NewsCardHorizontal({ article }) {
   const {
     title = "No Title",
     description = "No Description",
-    urlToImage = "https://community.softr.io/uploads/db9110/original/2X/7/74e6e7e382d0ff5d7773ca9a87e6f6f8817a68a6.jpeg",
-    url,
+    urlToImage = null, // Allowing it to be null initially
+    url = "#",
   } = article;
   const theme = useTheme();
   const isMediumScreen = useMediaQuery(theme.breakpoints.down("md"));
-  const [imgSrc, setImgSrc] = useState(urlToImage);
+
+  const img_placeholder =
+    "https://media.istockphoto.com/id/1409329028/vector/no-picture-available-placeholder-thumbnail-icon-illustration-design.jpg?s=170667a&w=0&k=20&c=Q7gLG-xfScdlTlPGFohllqpNqpxsU1jy8feD_fob87U=";
+
+  // Set a fallback image URL if urlToImage is invalid or null
+  const [imgSrc, setImgSrc] = React.useState(urlToImage || img_placeholder);
+
+  const handleImageError = () => {
+    setImgSrc(img_placeholder);
+  };
+
+  React.useEffect(() => {
+    if (urlToImage == null || urlToImage === "") {
+      setImgSrc(img_placeholder);
+    }
+  }, [urlToImage]);
 
   return (
     <div
@@ -57,11 +72,7 @@ function NewsCardHorizontal({ article }) {
               objectFit: "cover",
               transition: "transform 0.3s ease-in-out", // Image transition effect
             }}
-            onError={() =>
-              setImgSrc(
-                "https://media.istockphoto.com/id/1409329028/vector/no-picture-available-placeholder-thumbnail-icon-illustration-design.jpg?s=170667a&w=0&k=20&c=Q7gLG-xfScdlTlPGFohllqpNqpxsU1jy8feD_fob87U="
-              )
-            } // Fallback image
+            onError={handleImageError} // Handle image load error
             onMouseEnter={(e) =>
               (e.currentTarget.style.transform = "scale(1.1)")
             } // Scale up on hover

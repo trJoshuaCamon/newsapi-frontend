@@ -10,11 +10,22 @@ export default function NewsCardVertical({ article }) {
   const {
     title = "No Title",
     description = "No Description",
-    urlToImage = "https://community.softr.io/uploads/db9110/original/2X/7/74e6e7e382d0ff5d7773ca9a87e6f6f8817a68a6.jpeg",
-    url,
+    urlToImage = null, // Allowing it to be null initially
+    url = "#",
   } = article;
 
+  const img_placeholder =
+    "https://community.softr.io/uploads/db9110/original/2X/7/74e6e7e382d0ff5d7773ca9a87e6f6f8817a68a6.jpeg";
+
   const [imgSrc, setImgSrc] = React.useState(urlToImage);
+
+  React.useEffect(() => {
+    if (urlToImage) {
+      setImgSrc(urlToImage);
+    } else {
+      setImgSrc(img_placeholder);
+    }
+  }, [urlToImage]);
 
   return (
     <Card
@@ -42,21 +53,18 @@ export default function NewsCardVertical({ article }) {
           },
         }}
         image={imgSrc}
-        onError={() =>
-          setImgSrc(
-            "https://media.istockphoto.com/id/1409329028/vector/no-picture-available-placeholder-thumbnail-icon-illustration-design.jpg?s=170667a&w=0&k=20&c=Q7gLG-xfScdlTlPGFohllqpNqpxsU1jy8feD_fob87U="
-          )
-        }
+        onError={() => setImgSrc(img_placeholder)}
         title={title}
       />
       <CardContent sx={{ flexGrow: 1 }}>
         <Typography gutterBottom variant="h5" component="div">
-          {title.length > 100 ? `${title.slice(0, 80)}...` : title}
+          {(title && title.length > 100 ? `${title.slice(0, 80)}...` : title) ||
+            "No Title"}
         </Typography>
         <Typography variant="body2" sx={{ color: "text.secondary" }}>
-          {description.length > 190
+          {(description && description.length > 190
             ? `${description.slice(0, 190)}...`
-            : description}
+            : description) || "No Description"}
         </Typography>
       </CardContent>
       <CardActions>
