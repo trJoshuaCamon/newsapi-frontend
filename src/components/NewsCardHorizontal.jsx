@@ -1,16 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Card,
   CardContent,
+  CardMedia,
   Typography,
   Button,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
 
-function NewsCardHorizantal() {
+function NewsCardHorizontal({ article }) {
+  const {
+    title = "No Title",
+    description = "No Description",
+    urlToImage = "https://community.softr.io/uploads/db9110/original/2X/7/74e6e7e382d0ff5d7773ca9a87e6f6f8817a68a6.jpeg",
+    url,
+  } = article;
   const theme = useTheme();
   const isMediumScreen = useMediaQuery(theme.breakpoints.down("md"));
+  const [imgSrc, setImgSrc] = useState(urlToImage);
 
   return (
     <div
@@ -25,43 +33,61 @@ function NewsCardHorizantal() {
     >
       <Card
         style={{
-          // maxWidth: "900px",
           width: "100%",
+          maxWidth: "1220px",
           display: "grid",
           gridTemplateColumns: isMediumScreen ? "1fr" : "1fr 1fr",
-          boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+          boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
           borderRadius: "16px",
           overflow: "hidden",
         }}
       >
         <div
           style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            backgroundColor: "#e5e7eb",
-            height: isMediumScreen ? "300px" : "100%",
+            overflow: "hidden", // Prevents the image from exceeding the container when scaled
+            transition: "transform 0.1s ease-in-out", // Smooth transition effect
           }}
         >
-          <div style={{ fontSize: "64px", color: "#9ca3af" }}>No Image</div>
+          <CardMedia
+            component="img"
+            image={imgSrc}
+            alt={title}
+            style={{
+              height: isMediumScreen ? "300px" : "100%",
+              objectFit: "cover",
+              transition: "transform 0.3s ease-in-out", // Image transition effect
+            }}
+            onError={() =>
+              setImgSrc(
+                "https://media.istockphoto.com/id/1409329028/vector/no-picture-available-placeholder-thumbnail-icon-illustration-design.jpg?s=170667a&w=0&k=20&c=Q7gLG-xfScdlTlPGFohllqpNqpxsU1jy8feD_fob87U="
+              )
+            } // Fallback image
+            onMouseEnter={(e) =>
+              (e.currentTarget.style.transform = "scale(1.1)")
+            } // Scale up on hover
+            onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")} // Return to normal size
+          />
         </div>
         <CardContent style={{ padding: "24px" }}>
           <Typography
             variant="h4"
             style={{ color: "#7c3aed", marginBottom: "16px" }}
           >
-            Survey finds a majority of Americans now disapprove of the job
-            President Trump is doing
+            {title}
           </Typography>
           <Typography
             variant="body1"
             style={{ color: "#374151", marginBottom: "16px" }}
           >
-            The Yahoo News/YouGov survey shows the president's approval rating
-            has fallen amid perceptions that he isn't prioritizing America's
-            most important issues.
+            {description}
           </Typography>
-          <Button color="primary" style={{ textTransform: "none" }}>
+          <Button
+            color="primary"
+            style={{ textTransform: "none" }}
+            component="a"
+            href={url}
+            target="_blank"
+          >
             Read More »
           </Button>
         </CardContent>
@@ -70,4 +96,4 @@ function NewsCardHorizantal() {
   );
 }
 
-export default NewsCardHorizantal;
+export default NewsCardHorizontal;
