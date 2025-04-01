@@ -8,6 +8,7 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 function NewsCardHorizontal({ article }) {
   const {
@@ -15,15 +16,18 @@ function NewsCardHorizontal({ article }) {
     description = "No Description",
     urlToImage = null, // Allowing it to be null initially
     url = "#",
+    articleID,
   } = article;
   const theme = useTheme();
   const isMediumScreen = useMediaQuery(theme.breakpoints.down("md"));
+  const navigate = useNavigate(); // Initialize useNavigate
 
   const img_placeholder =
     "https://media.istockphoto.com/id/1409329028/vector/no-picture-available-placeholder-thumbnail-icon-illustration-design.jpg?s=170667a&w=0&k=20&c=Q7gLG-xfScdlTlPGFohllqpNqpxsU1jy8feD_fob87U=";
 
   // Set a fallback image URL if urlToImage is invalid or null
   const [imgSrc, setImgSrc] = React.useState(urlToImage || img_placeholder);
+  const [isHovered, setIsHovered] = React.useState(false); // Track hover state
 
   // Handle image error (CORS or other issues)
   const handleImageError = (event) => {
@@ -32,6 +36,11 @@ function NewsCardHorizontal({ article }) {
       // The image failed to load (likely due to CORS), so use fallback image
       setImgSrc(img_placeholder);
     }
+  };
+
+  // Navigate function when the card is clicked
+  const handleCardClick = () => {
+    navigate(`/article/${articleID}`, { state: { article }, replace: true });
   };
 
   React.useEffect(() => {
@@ -53,73 +62,83 @@ function NewsCardHorizontal({ article }) {
         marginBlock: "40px",
       }}
     >
-      <Card
+      <div
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        onClick={handleCardClick}
         style={{
+          textDecoration: "none",
+          display: "block",
           width: "100%",
           maxWidth: "1220px",
-          display: "grid",
-          gridTemplateColumns: isMediumScreen ? "1fr" : "1fr 1fr",
-          boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
-          borderRadius: "16px",
-          overflow: "hidden",
+          cursor: "pointer",
         }}
       >
-        <div
+        <Card
           style={{
-            overflow: "hidden", // Prevents the image from exceeding the container when scaled
-            transition: "transform 0.1s ease-in-out", // Smooth transition effect
+            width: "100%",
+            maxWidth: "1220px",
+            display: "grid",
+            gridTemplateColumns: isMediumScreen ? "1fr" : "1fr 1fr",
+            boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
+            borderRadius: "16px",
+            overflow: "hidden",
+            cursor: "pointer",
           }}
         >
-          <CardMedia
-            component="img"
-            image={imgSrc || img_placeholder}
-            alt={title}
+          <div
             style={{
-              height: isMediumScreen ? "300px" : "100%",
-              objectFit: "cover",
-              transition: "transform 0.3s ease-in-out", // Image transition effect
-            }}
-            onError={handleImageError} // Handle image load error
-            onMouseEnter={(e) =>
-              (e.currentTarget.style.transform = "scale(1.1)")
-            } // Scale up on hover
-            onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")} // Return to normal size
-            crossOrigin="anonymous"
-          />
-        </div>
-        <CardContent style={{ padding: "24px" }}>
-          <Typography
-            variant="h4"
-            style={{
-              color:
-                theme.palette.mode === "dark"
-                  ? "#ffffff"
-                  : theme.palette.primary.main,
-              marginBottom: "16px",
+              overflow: "hidden", // Prevents the image from exceeding the container when scaled
             }}
           >
-            {title}
-          </Typography>
-          <Typography
-            variant="body1"
-            style={{
-              color: theme.palette.mode === "dark" ? "#ffffff" : "#374151",
-              marginBottom: "16px",
-            }}
-          >
-            {description}
-          </Typography>
-          <Button
-            color="primary"
-            style={{ textTransform: "none" }}
-            component="a"
-            href={url}
-            target="_blank"
-          >
-            Read More »
-          </Button>
-        </CardContent>
-      </Card>
+            <CardMedia
+              component="img"
+              image={imgSrc}
+              alt={title}
+              style={{
+                height: isMediumScreen ? "300px" : "100%",
+                objectFit: "cover",
+                transition: "transform 0.3s ease-in-out",
+                transform: isHovered ? "scale(1.1)" : "scale(1)",
+              }}
+              onError={handleImageError} // Handle image load error
+              crossOrigin="anonymous"
+            />
+          </div>
+          <CardContent style={{ padding: "24px" }}>
+            <Typography
+              variant="h4"
+              style={{
+                color:
+                  theme.palette.mode === "dark"
+                    ? "#ffffff"
+                    : theme.palette.primary.main,
+                marginBottom: "16px",
+              }}
+            >
+              {title}
+            </Typography>
+            <Typography
+              variant="body1"
+              style={{
+                color: theme.palette.mode === "dark" ? "#ffffff" : "#374151",
+                marginBottom: "16px",
+              }}
+            >
+              {description}
+            </Typography>
+            <Button
+              color="primary"
+              style={{ textTransform: "none" }}
+              component="a"
+              href={url}
+              target="_blank"
+            >
+              Read More »
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }

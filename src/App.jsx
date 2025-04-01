@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { Container, Paper, Typography, Box } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import ViewPost from "./ViewPost";
 
 import Navbar from "./components/Navbar";
 
@@ -33,53 +35,62 @@ export default function App() {
   const isMdScreen = useMediaQuery("(max-width:960px)");
 
   return (
-    <ThemeProvider theme={appTheme}>
-      <Paper
-        elevation={0}
-        square
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          minHeight: "100vh", // Removed fixed height
-        }}
-      >
-        <Navbar themeMode={themeMode} handleThemeMode={handleThemeMode} />
-
-        <Box
+    <Router>
+      <ThemeProvider theme={appTheme}>
+        <Paper
+          elevation={0}
+          square
           sx={{
             display: "flex",
-            flexDirection: isMdScreen ? "column-reverse" : "row",
-            flex: 1,
-            overflow: "hidden",
+            flexDirection: "column",
+            minHeight: "100vh", // Removed fixed height
           }}
         >
-          {/* Main Content */}
-          <Box
-            sx={{
-              flex: isMdScreen ? 1 : 4,
-              overflowY: "auto",
-              padding: "20px",
-              bgcolor: "background.default",
-            }}
-          >
-            <MainContent />
-          </Box>
+          <Navbar themeMode={themeMode} handleThemeMode={handleThemeMode} />
 
-          {/* Sidebar */}
           <Box
             sx={{
-              flex: 1, // Ensures sidebar takes up full width on medium screens
-              minWidth: "300px",
-              minHeight: isMdScreen ? "auto" : "100vh", // Prevents shrinking
-              overflowY: "auto",
-              padding: "20px",
-              backgroundColor: themeMode ? "#252525" : "#eeeeee",
+              display: "flex",
+              flexDirection: isMdScreen ? "column-reverse" : "row",
+              flex: 1,
+              overflow: "hidden",
             }}
           >
-            <Sidebar />
+            {/* Main Content */}
+            <Box
+              sx={{
+                flex: isMdScreen ? 1 : 4,
+                overflowY: "auto",
+                padding: "20px",
+                bgcolor: "background.default",
+              }}
+            >
+              <Routes>
+                <Route path="/" element={<MainContent />} />
+                <Route path="/article/:id" element={<ViewPost />} />
+
+                {/* <Route path="*" element={<MainContent />} /> */}
+                {/* <Route path="/new" element={<NewPage />} /> */}
+                {/* Add other routes here */}
+              </Routes>
+            </Box>
+
+            {/* Sidebar */}
+            <Box
+              sx={{
+                flex: 1, // Ensures sidebar takes up full width on medium screens
+                minWidth: "300px",
+                minHeight: isMdScreen ? "auto" : "100vh", // Prevents shrinking
+                overflowY: "auto",
+                padding: "20px",
+                backgroundColor: themeMode ? "#252525" : "#eeeeee",
+              }}
+            >
+              <Sidebar />
+            </Box>
           </Box>
-        </Box>
-      </Paper>
-    </ThemeProvider>
+        </Paper>
+      </ThemeProvider>
+    </Router>
   );
 }

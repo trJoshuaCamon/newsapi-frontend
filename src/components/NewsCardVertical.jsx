@@ -5,21 +5,30 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import { useNavigate } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
 
 export default function NewsCardVertical({ article }) {
   const {
     title = "No Title",
     description = "No Description",
-    urlToImage = null, // Allowing it to be null initially
+    urlToImage = null,
     url = "#",
+    articleID,
   } = article;
 
   const img_placeholder =
     "https://community.softr.io/uploads/db9110/original/2X/7/74e6e7e382d0ff5d7773ca9a87e6f6f8817a68a6.jpeg";
 
   const [imgSrc, setImgSrc] = React.useState(urlToImage);
-  const theme = useTheme(); // Get the current theme
+  const [isHovered, setIsHovered] = React.useState(false);
+
+  const theme = useTheme();
+  const navigate = useNavigate();
+
+  const handleCardClick = () => {
+    navigate(`/article/${articleID}`, { state: { article }, replace: true });
+  };
 
   React.useEffect(() => {
     if (urlToImage) {
@@ -45,16 +54,18 @@ export default function NewsCardVertical({ article }) {
         margin: "10px",
         backgroundColor: theme.palette.background.paper, // Adjust card background based on theme
         color: theme.palette.text.primary, // Adjust text color based on theme
+        cursor: "pointer",
       }}
+      onMouseEnter={() => setIsHovered(true)} // Set hover state when the card is hovered
+      onMouseLeave={() => setIsHovered(false)} // Reset hover state when the card is no longer hovered
+      onClick={handleCardClick}
     >
       <CardMedia
         sx={{
           height: 140,
           overflow: "hidden",
           transition: "transform 0.1s ease-in-out",
-          "&:hover": {
-            transform: "scale(1.05)",
-          },
+          transform: isHovered ? "scale(1.05)" : "scale(1)",
         }}
         image={imgSrc}
         onError={() => setImgSrc(img_placeholder)}
@@ -88,7 +99,7 @@ export default function NewsCardVertical({ article }) {
         <Button
           size="small"
           // color="primary"
-          // style={{ textTransform: "none" }}
+          style={{ textTransform: "none" }}
           component="a"
           href={url}
           target="_blank"

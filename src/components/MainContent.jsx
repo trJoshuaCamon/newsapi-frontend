@@ -62,24 +62,25 @@ const MainContent = () => {
         const responseTopHeadlines = await fetch(topHeadline_URL);
 
         // Fetch data for each category
-        const responseBusiness = await fetch(URL_business);
-        const responseEntertainment = await fetch(URL_entertainment);
-        const responseGeneral = await fetch(URL_general);
-        const responseHealth = await fetch(URL_health);
-        const responseScience = await fetch(URL_science);
-        const responseSports = await fetch(URL_sports);
-        const responseTechnology = await fetch(URL_technology);
+        // const responseBusiness = await fetch(URL_business);
+        // const responseEntertainment = await fetch(URL_entertainment);
+        // const responseGeneral = await fetch(URL_general);
+        // const responseHealth = await fetch(URL_health);
+        // const responseScience = await fetch(URL_science);
+        // const responseSports = await fetch(URL_sports);
+        // const responseTechnology = await fetch(URL_technology);
 
         // Check if all responses are successful
         if (
-          !responseTopHeadlines.ok ||
-          !responseBusiness.ok ||
-          !responseEntertainment.ok ||
-          !responseGeneral.ok ||
-          !responseHealth.ok ||
-          !responseScience.ok ||
-          !responseSports.ok ||
-          !responseTechnology.ok
+          !responseTopHeadlines.ok
+          // ||
+          // !responseBusiness.ok ||
+          // !responseEntertainment.ok ||
+          // !responseGeneral.ok ||
+          // !responseHealth.ok ||
+          // !responseScience.ok ||
+          // !responseSports.ok ||
+          // !responseTechnology.ok
         ) {
           throw new Error("Failed to fetch articles");
         }
@@ -87,25 +88,34 @@ const MainContent = () => {
         const dataTopHeadlines = await responseTopHeadlines.json();
 
         // Parse the data from each response
-        const dataBusiness = await responseBusiness.json();
-        const dataEntertainment = await responseEntertainment.json();
-        const dataGeneral = await responseGeneral.json();
-        const dataHealth = await responseHealth.json();
-        const dataScience = await responseScience.json();
-        const dataSports = await responseSports.json();
-        const dataTechnology = await responseTechnology.json();
+        // const dataBusiness = await responseBusiness.json();
+        // const dataEntertainment = await responseEntertainment.json();
+        // const dataGeneral = await responseGeneral.json();
+        // const dataHealth = await responseHealth.json();
+        // const dataScience = await responseScience.json();
+        // const dataSports = await responseSports.json();
+        // const dataTechnology = await responseTechnology.json();
 
-        // Set the articles for each category
+        // Add IDs to articles
+        const addIdsToArticles = (articles) => {
+          return articles.map((article, index) => ({
+            ...article,
+            articleID: `${index + 1}`,
+          }));
+        };
+
+        // Set the articles with IDs for each category
         setArticles({
-          topHeadlines: dataTopHeadlines.articles,
-          business: dataBusiness.articles,
-          entertainment: dataEntertainment.articles,
-          general: dataGeneral.articles,
-          health: dataHealth.articles,
-          science: dataScience.articles,
-          sports: dataSports.articles,
-          technology: dataTechnology.articles,
+          topHeadlines: addIdsToArticles(dataTopHeadlines.articles),
+          // business: addIdsToArticles(dataBusiness.articles),
+          // entertainment: addIdsToArticles(dataEntertainment.articles),
+          // general: addIdsToArticles(dataGeneral.articles),
+          // health: addIdsToArticles(dataHealth.articles),
+          // science: addIdsToArticles(dataScience.articles),
+          // sports: addIdsToArticles(dataSports.articles),
+          // technology: addIdsToArticles(dataTechnology.articles),
         });
+
         setLoading(false);
       } catch (error) {
         setError(error.message);
@@ -126,7 +136,9 @@ const MainContent = () => {
 
   const firstTopHeadline_article = articles.topHeadlines[0];
   const fourTopHeadline_articles = articles.topHeadlines.slice(1, 5);
-
+  {
+    console.log(articles);
+  }
   return (
     <Box>
       <NewsCardHorizontal article={firstTopHeadline_article} />
@@ -139,7 +151,7 @@ const MainContent = () => {
 
       <Divider />
 
-      <NewsCarousel label="Business" passedArticles={articles.business} />
+      {/* <NewsCarousel label="Business" passedArticles={articles.business} />
       <Divider />
 
       <NewsCarousel
@@ -161,7 +173,7 @@ const MainContent = () => {
       <Divider />
 
       <NewsCarousel label="Technology" passedArticles={articles.technology} />
-      <Divider />
+      <Divider /> */}
     </Box>
   );
 };
