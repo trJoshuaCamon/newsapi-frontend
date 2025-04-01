@@ -5,6 +5,7 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import { useTheme } from "@mui/material/styles";
 
 export default function NewsCardVertical({ article }) {
   const {
@@ -18,6 +19,7 @@ export default function NewsCardVertical({ article }) {
     "https://community.softr.io/uploads/db9110/original/2X/7/74e6e7e382d0ff5d7773ca9a87e6f6f8817a68a6.jpeg";
 
   const [imgSrc, setImgSrc] = React.useState(urlToImage);
+  const theme = useTheme(); // Get the current theme
 
   React.useEffect(() => {
     if (urlToImage) {
@@ -41,6 +43,8 @@ export default function NewsCardVertical({ article }) {
         minWidth: 275,
         maxWidth: { md: 400, lg: 290 },
         margin: "10px",
+        backgroundColor: theme.palette.background.paper, // Adjust card background based on theme
+        color: theme.palette.text.primary, // Adjust text color based on theme
       }}
     >
       <CardMedia
@@ -57,11 +61,24 @@ export default function NewsCardVertical({ article }) {
         title={title}
       />
       <CardContent sx={{ flexGrow: 1 }}>
-        <Typography gutterBottom variant="h5" component="div">
+        <Typography
+          gutterBottom
+          variant="h5"
+          component="div"
+          style={{
+            display: "-webkit-box",
+            WebkitBoxOrient: "vertical",
+            overflow: "hidden",
+            WebkitLineClamp: 3,
+          }}
+        >
           {(title && title.length > 100 ? `${title.slice(0, 80)}...` : title) ||
             "No Title"}
         </Typography>
-        <Typography variant="body2" sx={{ color: "text.secondary" }}>
+        <Typography
+          variant="body2"
+          sx={{ color: theme.palette.text.secondary }}
+        >
           {(description && description.length > 190
             ? `${description.slice(0, 190)}...`
             : description) || "No Description"}
@@ -75,6 +92,9 @@ export default function NewsCardVertical({ article }) {
           component="a"
           href={url}
           target="_blank"
+          sx={{
+            color: theme.palette.primary.main, // Adjust button text color based on theme
+          }}
         >
           Read More »
         </Button>

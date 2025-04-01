@@ -59,7 +59,7 @@ export default function App() {
               flex: isMdScreen ? 1 : 4,
               overflowY: "auto",
               padding: "20px",
-              backgroundColor: "#f5f5f5",
+              bgcolor: "background.default",
             }}
           >
             <MainContent />
@@ -73,7 +73,7 @@ export default function App() {
               minHeight: isMdScreen ? "auto" : "100vh", // Prevents shrinking
               overflowY: "auto",
               padding: "20px",
-              backgroundColor: "#e0e0e0",
+              backgroundColor: themeMode ? "#252525" : "#eeeeee",
             }}
           >
             <Sidebar />

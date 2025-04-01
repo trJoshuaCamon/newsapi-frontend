@@ -127,43 +127,6 @@ const MainContent = () => {
   const firstTopHeadline_article = articles.topHeadlines[0];
   const fourTopHeadline_articles = articles.topHeadlines.slice(1, 5);
 
-  // // Render first article for each category
-  // const firstBusinessArticle = articles.business[0];
-  // const firstEntertainmentArticle = articles.entertainment[0];
-  // const firstGeneralArticle = articles.general[0];
-  // const firstHealthArticle = articles.health[0];
-  // const firstScienceArticle = articles.science[0];
-  // const firstSportsArticle = articles.sports[0];
-  // const firstTechnologyArticle = articles.technology[0];
-
-  // // Render four remaining articles for each category
-  // const remainingBusinessArticles = articles.business.slice(1, 5);
-  // const remainingEntertainmentArticles = articles.entertainment.slice(1, 5);
-  // const remainingGeneralArticles = articles.general.slice(1, 5);
-  // const remainingHealthArticles = articles.health.slice(1, 5);
-  // const remainingScienceArticles = articles.science.slice(1, 5);
-  // const remainingSportsArticles = articles.sports.slice(1, 5);
-  // const remainingTechnologyArticles = articles.technology.slice(1, 5);
-
-  // const sportsArticles = articles.filter(
-  //   (article) => article.category === "sports"
-  // );
-  // const businessArticles = articles.filter(
-  //   (article) => article.category === "business"
-  // );
-  // const technologyArticles = articles.filter(
-  //   (article) => article.category === "technology"
-  // );
-  // const entertainmentArticles = articles.filter(
-  //   (article) => article.category === "entertainment"
-  // );
-  // const healthArticles = articles.filter(
-  //   (article) => article.category === "health"
-  // );
-  // const scienceArticles = articles.filter(
-  //   (article) => article.category === "science"
-  // );
-
   return (
     <Box>
       <NewsCardHorizontal article={firstTopHeadline_article} />
@@ -183,7 +146,7 @@ const MainContent = () => {
         label="Entertainment"
         passedArticles={articles.entertainment}
       />
-      <Divider />
+      <Divider sx={{ marginBottom: "20px" }} />
 
       <NewsCarousel label="General" passedArticles={articles.general} />
       <Divider />

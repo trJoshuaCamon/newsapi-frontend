@@ -5,11 +5,14 @@ import {
   CircularProgress,
   Typography,
   IconButton,
+  useTheme,
 } from "@mui/material";
 import { ArrowBack, ArrowForward } from "@mui/icons-material";
 import NewsCardVertical from "./NewsCardVertical";
 
 const NewsCarousel = ({ label, passedArticles }) => {
+  const theme = useTheme();
+  const isDarkMode = theme.palette.mode === "dark";
   // Reference to the Box containing the articles
   const scrollContainerRef = useRef(null);
 
@@ -34,7 +37,7 @@ const NewsCarousel = ({ label, passedArticles }) => {
   };
 
   return (
-    <Box sx={{ width: "100%", position: "relative" }}>
+    <Box sx={{ width: "100%", position: "relative", marginBlock: "50px" }}>
       <Typography variant="h4" sx={{ marginBlock: "20px" }}>
         {label}
       </Typography>
@@ -46,18 +49,22 @@ const NewsCarousel = ({ label, passedArticles }) => {
             onClick={scrollLeft}
             sx={{
               position: "absolute",
-              left: 10, // Add margin to place the button inside the container
+              left: 10,
               top: "50%",
               transform: "translateY(-50%)",
-              zIndex: 2, // Ensure it's above other elements
-              color: "white", // White arrow icon for better contrast
-              backgroundColor: "rgba(0, 0, 0, 0.5)", // Semi-transparent background for better visibility
-              borderRadius: "50%", // Round shape for the button
-              padding: "10px", // Padding for a larger clickable area
+              zIndex: 2,
+              color: isDarkMode ? "#ffffff" : "#000000",
+              backgroundColor: isDarkMode
+                ? "rgba(255, 255, 255, 0.4)"
+                : "rgba(0, 0, 0, 0.2)",
+              borderRadius: "50%",
+              padding: "10px",
               boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)", // Subtle shadow for depth
               "&:hover": {
-                backgroundColor: "rgba(0, 0, 0, 0.7)", // Darker background on hover
-                boxShadow: "0px 6px 12px rgba(0, 0, 0, 0.3)", // More intense shadow on hover
+                backgroundColor: isDarkMode
+                  ? "rgba(255, 255, 255, 0.4)"
+                  : "rgba(0, 0, 0, 0.4)", // Stronger hover effect
+                boxShadow: "0px 6px 12px rgba(0, 0, 0, 0.3)",
               },
             }}
           >
@@ -70,6 +77,7 @@ const NewsCarousel = ({ label, passedArticles }) => {
               overflowX: "auto",
               width: "100%",
               alignItems: "center",
+              paddingBottom: "30px",
             }}
             ref={scrollContainerRef}
           >
@@ -97,14 +105,18 @@ const NewsCarousel = ({ label, passedArticles }) => {
               top: "50%",
               transform: "translateY(-50%)",
               zIndex: 2, // Ensure it's above other elements
-              color: "white", // White arrow icon for better contrast
-              backgroundColor: "rgba(0, 0, 0, 0.5)", // Semi-transparent background for better visibility
-              borderRadius: "50%", // Round shape for the button
-              padding: "10px", // Padding for a larger clickable area
+              color: isDarkMode ? "#ffffff" : "#000000",
+              backgroundColor: isDarkMode
+                ? "rgba(255, 255, 255, 0.4)"
+                : "rgba(0, 0, 0, 0.2)",
+              borderRadius: "50%",
+              padding: "10px",
               boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)", // Subtle shadow for depth
               "&:hover": {
-                backgroundColor: "rgba(0, 0, 0, 0.7)", // Darker background on hover
-                boxShadow: "0px 6px 12px rgba(0, 0, 0, 0.3)", // More intense shadow on hover
+                backgroundColor: isDarkMode
+                  ? "rgba(255, 255, 255, 0.4)"
+                  : "rgba(0, 0, 0, 0.4)", // Stronger hover effect
+                boxShadow: "0px 6px 12px rgba(0, 0, 0, 0.3)",
               },
             }}
           >

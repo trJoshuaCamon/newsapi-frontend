@@ -25,13 +25,20 @@ function NewsCardHorizontal({ article }) {
   // Set a fallback image URL if urlToImage is invalid or null
   const [imgSrc, setImgSrc] = React.useState(urlToImage || img_placeholder);
 
-  const handleImageError = () => {
-    setImgSrc(img_placeholder);
+  // Handle image error (CORS or other issues)
+  const handleImageError = (event) => {
+    // Check if the error was due to a CORS issue (by checking the event)
+    if (event.target.naturalWidth === 0) {
+      // The image failed to load (likely due to CORS), so use fallback image
+      setImgSrc(img_placeholder);
+    }
   };
 
   React.useEffect(() => {
-    if (urlToImage == null || urlToImage === "") {
+    if (!urlToImage) {
       setImgSrc(img_placeholder);
+    } else {
+      setImgSrc(urlToImage);
     }
   }, [urlToImage]);
 
@@ -42,7 +49,7 @@ function NewsCardHorizontal({ article }) {
         justifyContent: "center",
         alignItems: "center",
         // minHeight: "100vh",
-        backgroundColor: "#f3f4f6",
+        backgroundColor: theme.palette.background.default,
         marginBlock: "40px",
       }}
     >
@@ -65,7 +72,7 @@ function NewsCardHorizontal({ article }) {
         >
           <CardMedia
             component="img"
-            image={imgSrc}
+            image={imgSrc || img_placeholder}
             alt={title}
             style={{
               height: isMediumScreen ? "300px" : "100%",
@@ -77,18 +84,28 @@ function NewsCardHorizontal({ article }) {
               (e.currentTarget.style.transform = "scale(1.1)")
             } // Scale up on hover
             onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")} // Return to normal size
+            crossOrigin="anonymous"
           />
         </div>
         <CardContent style={{ padding: "24px" }}>
           <Typography
             variant="h4"
-            style={{ color: "#7c3aed", marginBottom: "16px" }}
+            style={{
+              color:
+                theme.palette.mode === "dark"
+                  ? "#ffffff"
+                  : theme.palette.primary.main,
+              marginBottom: "16px",
+            }}
           >
             {title}
           </Typography>
           <Typography
             variant="body1"
-            style={{ color: "#374151", marginBottom: "16px" }}
+            style={{
+              color: theme.palette.mode === "dark" ? "#ffffff" : "#374151",
+              marginBottom: "16px",
+            }}
           >
             {description}
           </Typography>
