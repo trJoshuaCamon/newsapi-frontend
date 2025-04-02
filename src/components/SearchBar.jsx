@@ -10,6 +10,7 @@ import {
 import { styled, alpha } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
+import { useNavigate } from "react-router-dom";
 
 const API_KEY = import.meta.env.VITE_NEWS_API_KEY;
 const API_URL = "https://newsapi.org/v2/everything";
@@ -40,8 +41,16 @@ export default function SearchBar() {
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [showResults, setShowResults] = useState(false); // State to control visibility of results
+  const navigate = useNavigate();
 
   const resultsRef = useRef(null); // Reference for the results dropdown
+
+  // TODO: WHEN CLICKING SEARCH RESULTS, VIEW POST REDIRECT
+  const handleCardClick = (article) => {
+    navigate(`/article/${category}/${articleID}`, {
+      replace: true,
+    });
+  };
 
   useEffect(() => {
     if (query.length < 3) {
@@ -132,7 +141,7 @@ export default function SearchBar() {
               <ListItem
                 sx={{ cursor: "pointer" }}
                 key={index}
-                onClick={() => window.open(article.url, "_blank")}
+                onClick={() => handleCardClick(article)}
               >
                 {article.title}
               </ListItem>
