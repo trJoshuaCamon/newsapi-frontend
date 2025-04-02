@@ -1,10 +1,11 @@
 import React from "react";
 import { Box, Typography, Button } from "@mui/material";
+import TopHeadlinesSidebar from "./topHeadlinesSidebar";
 
-const Sidebar = () => {
+const Sidebar = ({ allArticles }) => {
   return (
     <Box>
-      <Typography variant="h5" gutterBottom>
+      {/* <Typography variant="h5" gutterBottom>
         Sidebar
       </Typography>
 
@@ -14,7 +15,8 @@ const Sidebar = () => {
 
       <Button variant="contained" color="primary">
         Example Button
-      </Button>
+      </Button> */}
+      <TopHeadlinesSidebar allArticles={allArticles} />
     </Box>
   );
 };

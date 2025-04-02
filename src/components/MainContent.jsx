@@ -22,7 +22,9 @@ const MainContent = ({ allArticles }) => {
 
   return (
     <Box>
-      <NewsCardHorizontal article={firstTopHeadline_article} />
+      <Box id="News">
+        <NewsCardHorizontal article={firstTopHeadline_article} />
+      </Box>
 
       <Stack {...stackProps}>
         {fourTopHeadline_articles.map((article, index) => (
@@ -31,32 +33,46 @@ const MainContent = ({ allArticles }) => {
       </Stack>
 
       <Divider />
-
-      <NewsCarousel label="Business" passedArticles={allArticles.business} />
+      <Box id="Business">
+        <NewsCarousel label="Business" passedArticles={allArticles.business} />
+      </Box>
       <Divider />
 
-      <NewsCarousel
-        label="Entertainment"
-        passedArticles={allArticles.entertainment}
-      />
-      <Divider sx={{ marginBottom: "20px" }} />
-
-      <NewsCarousel label="General" passedArticles={allArticles.general} />
+      <Box id="Entertainment">
+        <NewsCarousel
+          label="Entertainment"
+          passedArticles={allArticles.entertainment}
+        />
+      </Box>
       <Divider />
 
-      <NewsCarousel label="Health" passedArticles={allArticles.health} />
+      <Box id="General">
+        <NewsCarousel label="General" passedArticles={allArticles.general} />
+      </Box>
       <Divider />
 
-      <NewsCarousel label="Science" passedArticles={allArticles.science} />
+      <Box id="Health">
+        <NewsCarousel label="Health" passedArticles={allArticles.health} />
+      </Box>
+
       <Divider />
 
-      <NewsCarousel label="Sports" passedArticles={allArticles.sports} />
+      <Box id="Science">
+        <NewsCarousel label="Science" passedArticles={allArticles.science} />
+      </Box>
       <Divider />
 
-      <NewsCarousel
-        label="Technology"
-        passedArticles={allArticles.technology}
-      />
+      <Box id="Sports">
+        <NewsCarousel label="Sports" passedArticles={allArticles.sports} />
+      </Box>
+      <Divider />
+
+      <Box id="Technology">
+        <NewsCarousel
+          label="Technology"
+          passedArticles={allArticles.technology}
+        />
+      </Box>
       <Divider />
     </Box>
   );

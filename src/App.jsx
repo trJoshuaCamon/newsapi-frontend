@@ -250,7 +250,7 @@ export default function App() {
                 backgroundColor: themeMode ? "#252525" : "#eeeeee",
               }}
             >
-              <Sidebar />
+              <Sidebar allArticles={allArticles} />
             </Box>
           </Box>
         </Paper>

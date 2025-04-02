@@ -16,12 +16,33 @@ import SearchBar from "./SearchBar";
 import ThemeSwitch from "./ThemeSwitch";
 import DateTimeDisplay from "./DateTimeDisplay";
 
-const pages = ["News", "Business", "More"];
+const pages = [
+  "News",
+  "Business",
+  "Entertainment",
+  "General",
+  "Health",
+  "Science",
+  "Sports",
+  "Technology",
+];
 // const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 const appTitle = "PEIK NEWS";
 
 function ResponsiveAppBar({ themeMode, handleThemeMode }) {
+  const handleScroll = (id) => {
+    console.log(`Scrolling to section: ${id}`); // Debugging log
+    const element = document.getElementById(id);
+
+    if (element) {
+      console.log(`Found element with id: ${id}, scrolling now...`);
+      element.scrollIntoView({ behavior: "smooth", block: "start" });
+    } else {
+      console.error(`Element with id: ${id} not found!, can't do scrolling`);
+    }
+  };
+
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   // const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -91,7 +112,13 @@ function ResponsiveAppBar({ themeMode, handleThemeMode }) {
               sx={{ display: { xs: "block", md: "none" } }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
+                <MenuItem
+                  key={page}
+                  onClick={() => {
+                    handleCloseNavMenu();
+                    handleScroll(page);
+                  }}
+                >
                   <Typography sx={{ textAlign: "center" }}>{page}</Typography>
                 </MenuItem>
               ))}
@@ -128,7 +155,10 @@ function ResponsiveAppBar({ themeMode, handleThemeMode }) {
             {pages.map((page) => (
               <Button
                 key={page}
-                onClick={handleCloseNavMenu}
+                onClick={() => {
+                  handleCloseNavMenu();
+                  handleScroll(page);
+                }}
                 sx={{ my: 2, color: "white", display: "block" }}
               >
                 {page}
