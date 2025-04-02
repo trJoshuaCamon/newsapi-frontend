@@ -1,9 +1,18 @@
-import * as React from "react";
+import React, { useState, useEffect, useRef } from "react";
+import {
+  CircularProgress,
+  List,
+  ListItem,
+  Paper,
+  Box,
+  IconButton,
+} from "@mui/material";
 import { styled, alpha } from "@mui/material/styles";
-import Box from "@mui/material/Box";
 import InputBase from "@mui/material/InputBase";
-import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
+
+const API_KEY = import.meta.env.VITE_NEWS_API_KEY;
+const API_URL = "https://newsapi.org/v2/everything";
 
 const SearchContainer = styled("div")(({ theme }) => ({
   display: "flex",
@@ -27,12 +36,69 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function SearchBar() {
+  const [query, setQuery] = useState("");
+  const [results, setResults] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [showResults, setShowResults] = useState(false); // State to control visibility of results
+
+  const resultsRef = useRef(null); // Reference for the results dropdown
+
+  useEffect(() => {
+    if (query.length < 3) {
+      setResults([]);
+      return;
+    }
+
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch(
+          `${API_URL}?q=${encodeURIComponent(query)}&apiKey=${API_KEY}`
+        );
+        const data = await response.json();
+        setResults(data.articles || []);
+      } catch (error) {
+        console.error("Error fetching news:", error);
+      }
+      setLoading(false);
+    };
+
+    const debounceFetch = setTimeout(fetchData, 500);
+    return () => clearTimeout(debounceFetch);
+  }, [query]);
+
+  // Hide the results when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (resultsRef.current && !resultsRef.current.contains(event.target)) {
+        setShowResults(false); // Hide results when clicking outside
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  // Show results when there are search results
+  useEffect(() => {
+    if (results.length > 0 && query.length > 2) {
+      setShowResults(true);
+    } else {
+      setShowResults(false);
+    }
+  }, [results, query]);
+
   return (
     <Box sx={{ width: { xs: "200px", sm: "250px", md: "300px", lg: "400px" } }}>
       <SearchContainer>
         <StyledInputBase
           placeholder="Search News..."
           inputProps={{ "aria-label": "search" }}
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
         />
         <IconButton
           onClick={() => alert("Search icon clicked!")}
@@ -41,6 +107,39 @@ export default function SearchBar() {
           <SearchIcon />
         </IconButton>
       </SearchContainer>
+
+      {loading && (
+        <CircularProgress
+          size={20}
+          style={{ position: "absolute", top: "10px", right: "10px" }}
+        />
+      )}
+
+      {showResults && results.length > 0 && (
+        <Paper
+          ref={resultsRef}
+          style={{
+            position: "absolute",
+            width: "50%",
+            maxHeight: "350px",
+            overflowY: "auto",
+            marginTop: "5px",
+            zIndex: 3,
+          }}
+        >
+          <List>
+            {results.map((article, index) => (
+              <ListItem
+                sx={{ cursor: "pointer" }}
+                key={index}
+                onClick={() => window.open(article.url, "_blank")}
+              >
+                {article.title}
+              </ListItem>
+            ))}
+          </List>
+        </Paper>
+      )}
     </Box>
   );
 }

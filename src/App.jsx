@@ -5,7 +5,6 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ViewPost from "./ViewPost";
 import FullPageLoading from "./components/FullPageLoading";
-import Cookies from "js-cookie";
 
 import Navbar from "./components/Navbar";
 

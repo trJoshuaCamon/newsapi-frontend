@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, Typography, Button } from "@mui/material";
-import TopHeadlinesSidebar from "./topHeadlinesSidebar";
+import TopHeadlinesSidebar from "./TopHeadlinesSidebar";
 
 const Sidebar = ({ allArticles }) => {
   return (
