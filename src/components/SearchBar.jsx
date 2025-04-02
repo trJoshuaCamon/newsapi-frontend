@@ -1,64 +1,46 @@
 import * as React from "react";
 import { styled, alpha } from "@mui/material/styles";
-import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
 import InputBase from "@mui/material/InputBase";
-import MenuIcon from "@mui/icons-material/Menu";
+import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
 
-const Search = styled("div")(({ theme }) => ({
-  position: "relative",
-  // borderRadius: theme.shape.borderRadius,
+const SearchContainer = styled("div")(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
   borderRadius: "100px",
   backgroundColor: alpha(theme.palette.common.white, 0.15),
   "&:hover": {
     backgroundColor: alpha(theme.palette.common.white, 0.25),
   },
-  marginLeft: 0,
+  padding: theme.spacing(0.5, 1),
   width: "100%",
-  [theme.breakpoints.up("sm")]: {
-    marginLeft: theme.spacing(1),
-    width: "auto",
-  },
-}));
-
-const SearchIconWrapper = styled("div")(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: "100%",
-  position: "absolute",
-  pointerEvents: "none",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
+  maxWidth: "400px",
 }));
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: "inherit",
-  width: "100%",
-
+  flex: 1,
   "& .MuiInputBase-input": {
-    padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+    padding: theme.spacing(1),
   },
 }));
 
 export default function SearchBar() {
   return (
     <Box sx={{ width: { xs: "200px", sm: "250px", md: "300px", lg: "400px" } }}>
-      <Search>
-        <SearchIconWrapper>
-          <SearchIcon />
-        </SearchIconWrapper>
-
+      <SearchContainer>
         <StyledInputBase
           placeholder="Search News..."
           inputProps={{ "aria-label": "search" }}
         />
-      </Search>
+        <IconButton
+          onClick={() => alert("Search icon clicked!")}
+          sx={{ color: "white" }}
+        >
+          <SearchIcon />
+        </IconButton>
+      </SearchContainer>
     </Box>
   );
 }
