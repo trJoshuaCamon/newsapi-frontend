@@ -15,6 +15,7 @@ import AdbIcon from "@mui/icons-material/Adb";
 import SearchBar from "./SearchBar";
 import ThemeSwitch from "./ThemeSwitch";
 import DateTimeDisplay from "./DateTimeDisplay";
+import { useNavigate } from "react-router-dom";
 
 const pages = [
   "News",
@@ -31,6 +32,12 @@ const pages = [
 const appTitle = "PEIK NEWS";
 
 function ResponsiveAppBar({ themeMode, handleThemeMode }) {
+  const navigate = useNavigate();
+
+  const handleBackToHome = () => {
+    navigate("/");
+  };
+
   const handleScroll = (id) => {
     console.log(`Scrolling to section: ${id}`); // Debugging log
     const element = document.getElementById(id);
@@ -66,13 +73,16 @@ function ResponsiveAppBar({ themeMode, handleThemeMode }) {
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
+
           <Typography
             variant="h6"
             noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
+            component={"span"}
+            onClick={() => handleBackToHome()}
             sx={{
               mr: 2,
+              cursor: "pointer",
+
               display: { xs: "none", md: "flex" },
               fontFamily: "monospace",
               fontWeight: 700,
@@ -129,10 +139,11 @@ function ResponsiveAppBar({ themeMode, handleThemeMode }) {
           <Typography
             variant="h5"
             noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
+            component={"span"}
+            onClick={() => handleBackToHome()}
             sx={{
               mr: 2,
+              cursor: "pointer",
               display: { xs: "flex", md: "none" },
               flexGrow: 1,
               fontFamily: "monospace",

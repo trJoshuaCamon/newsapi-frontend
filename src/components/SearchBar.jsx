@@ -45,9 +45,9 @@ export default function SearchBar() {
 
   const resultsRef = useRef(null); // Reference for the results dropdown
 
-  // TODO: WHEN CLICKING SEARCH RESULTS, VIEW POST REDIRECT
   const handleCardClick = (article) => {
-    navigate(`/article/${category}/${articleID}`, {
+    navigate(`/article/search/${article.title}`, {
+      state: { article },
       replace: true,
     });
   };

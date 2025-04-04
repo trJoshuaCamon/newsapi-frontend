@@ -231,6 +231,10 @@ export default function App() {
                   element={<MainContent allArticles={allArticles} />}
                 />
                 <Route path="/article/:category/:id" element={<ViewPost />} />
+                <Route
+                  path="/article/search/:articleTitleSearch"
+                  element={<ViewPost />}
+                />
 
                 {/* <Route path="*" element={<MainContent />} /> */}
                 {/* <Route path="/new" element={<NewPage />} /> */}
