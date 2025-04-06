@@ -7,15 +7,14 @@ import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
-import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
-import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import SearchBar from "./SearchBar";
 import ThemeSwitch from "./ThemeSwitch";
 import DateTimeDisplay from "./DateTimeDisplay";
 import { useNavigate } from "react-router-dom";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 
 const pages = [
   "News",
@@ -27,62 +26,51 @@ const pages = [
   "Sports",
   "Technology",
 ];
-// const settings = ["Profile", "Account", "Dashboard", "Logout"];
+
+const primaryPages = ["News", "Business"];
+const morePages = pages.filter((page) => !primaryPages.includes(page));
 
 const appTitle = "PEIK NEWS";
 
 function ResponsiveAppBar({ themeMode, handleThemeMode }) {
   const navigate = useNavigate();
 
-  const handleBackToHome = () => {
-    navigate("/");
-  };
-
+  const handleBackToHome = () => navigate("/");
   const handleScroll = (id) => {
-    console.log(`Scrolling to section: ${id}`); // Debugging log
     const element = document.getElementById(id);
-
     if (element) {
-      console.log(`Found element with id: ${id}, scrolling now...`);
       element.scrollIntoView({ behavior: "smooth", block: "start" });
-    } else {
-      console.error(`Element with id: ${id} not found!, can't do scrolling`);
     }
   };
 
   const [anchorElNav, setAnchorElNav] = React.useState(null);
-  // const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [anchorElMore, setAnchorElMore] = React.useState(null);
 
-  const handleOpenNavMenu = (event) => {
-    setAnchorElNav(event.currentTarget);
+  const handleOpenNavMenu = (event) => setAnchorElNav(event.currentTarget);
+  const handleCloseNavMenu = () => setAnchorElNav(null);
+
+  const handleOpenMoreMenu = (event) => setAnchorElMore(event.currentTarget);
+  const handleCloseMoreMenu = () => {
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
+    setAnchorElMore(null);
   };
-  // const handleOpenUserMenu = (event) => {
-  //   setAnchorElUser(event.currentTarget);
-  // };
-
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
-  };
-
-  // const handleCloseUserMenu = () => {
-  //   setAnchorElUser(null);
-  // };
 
   return (
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
+          {/* Desktop Logo */}
           <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
-
           <Typography
             variant="h6"
             noWrap
-            component={"span"}
-            onClick={() => handleBackToHome()}
+            component="span"
+            onClick={handleBackToHome}
             sx={{
               mr: 2,
               cursor: "pointer",
-
               display: { xs: "none", md: "flex" },
               fontFamily: "monospace",
               fontWeight: 700,
@@ -94,12 +82,11 @@ function ResponsiveAppBar({ themeMode, handleThemeMode }) {
             {appTitle}
           </Typography>
 
+          {/* Mobile Nav */}
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
+              aria-label="menu"
               onClick={handleOpenNavMenu}
               color="inherit"
             >
@@ -108,15 +95,9 @@ function ResponsiveAppBar({ themeMode, handleThemeMode }) {
             <Menu
               id="menu-appbar"
               anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left",
-              }}
+              anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
               keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "left",
-              }}
+              transformOrigin={{ vertical: "top", horizontal: "left" }}
               open={Boolean(anchorElNav)}
               onClose={handleCloseNavMenu}
               sx={{ display: { xs: "block", md: "none" } }}
@@ -135,12 +116,13 @@ function ResponsiveAppBar({ themeMode, handleThemeMode }) {
             </Menu>
           </Box>
 
+          {/* Mobile Logo */}
           <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
           <Typography
             variant="h5"
             noWrap
-            component={"span"}
-            onClick={() => handleBackToHome()}
+            component="span"
+            onClick={handleBackToHome}
             sx={{
               mr: 2,
               cursor: "pointer",
@@ -156,75 +138,70 @@ function ResponsiveAppBar({ themeMode, handleThemeMode }) {
             {appTitle}
           </Typography>
 
-          {/* Searchbar */}
+          {/* Search Bar */}
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             <SearchBar />
           </Box>
 
-          {/* Pages */}
+          {/* Primary Pages + More Dropdown */}
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map((page) => (
+            {primaryPages.map((page) => (
               <Button
                 key={page}
-                onClick={() => {
-                  handleCloseNavMenu();
-                  handleScroll(page);
-                }}
+                onClick={() => handleScroll(page)}
                 sx={{ my: 2, color: "white", display: "block" }}
               >
                 {page}
               </Button>
             ))}
+
+            <Box sx={{ my: 2 }}>
+              <Button
+                sx={{ color: "white" }}
+                onClick={
+                  anchorElMore ? handleCloseMoreMenu : handleOpenMoreMenu
+                }
+              >
+                More
+                <KeyboardArrowDownIcon fontSize="small" />
+              </Button>
+              <Menu
+                anchorEl={anchorElMore}
+                open={Boolean(anchorElMore)}
+                onClose={handleCloseMoreMenu}
+                anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+                transformOrigin={{ vertical: "top", horizontal: "left" }}
+              >
+                {morePages.map((page) => (
+                  <MenuItem
+                    key={page}
+                    onClick={() => {
+                      handleScroll(page);
+                      handleCloseMoreMenu();
+                    }}
+                  >
+                    <Typography textAlign="center">{page}</Typography>
+                  </MenuItem>
+                ))}
+              </Menu>
+            </Box>
           </Box>
 
-          {/* Theme Switch */}
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+            {/* Theme Switch */}
+
             <ThemeSwitch
               themeMode={themeMode}
               handleThemeMode={handleThemeMode}
             />
-          </Box>
+            {/* Date Display */}
 
-          {/* Date Today */}
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             <DateTimeDisplay />
           </Box>
-
-          {/* Profile Dropdown
-          <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: "45px" }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography sx={{ textAlign: "center" }}>
-                    {setting}
-                  </Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box> */}
         </Toolbar>
       </Container>
     </AppBar>
   );
 }
+
 export default ResponsiveAppBar;
