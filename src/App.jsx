@@ -213,7 +213,6 @@ export default function App() {
               display: "flex",
               flexDirection: isMdScreen ? "column-reverse" : "row",
               flex: 1,
-              overflow: "hidden",
             }}
           >
             {/* Main Content */}
@@ -251,6 +250,10 @@ export default function App() {
                 overflowY: "auto",
                 padding: "20px",
                 backgroundColor: themeMode ? "#252525" : "#eeeeee",
+
+                position: isMdScreen ? "static" : "sticky",
+                top: "70px",
+                height: "100vh",
               }}
             >
               <Sidebar allArticles={allArticles} />
