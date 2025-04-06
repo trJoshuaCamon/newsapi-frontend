@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Typography, Stack, Button } from "@mui/material";
 import NewsCardHorizontal from "./NewsCardHorizontal";
 import NewsCardVertical from "./NewsCardVertical";
@@ -30,8 +30,14 @@ const MainContent = ({ allArticles }) => {
   const firstTopHeadline_article = allArticles.topHeadlines[0];
   const fourTopHeadline_articles = allArticles.topHeadlines.slice(1, 5);
 
+  useEffect(() => {
+    if (results && results.length > 0) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }, [results]);
+
   return (
-    <Box>
+    <Box id="MainContent">
       {results && results.length === 0 && (
         <>
           <Typography

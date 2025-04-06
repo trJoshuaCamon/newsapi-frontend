@@ -58,7 +58,7 @@ function ResponsiveAppBar({ themeMode, handleThemeMode }) {
   };
 
   return (
-    <AppBar position="static">
+    <AppBar position="sticky" sx={{ top: 0, zIndex: 1 }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           {/* Desktop Logo */}
