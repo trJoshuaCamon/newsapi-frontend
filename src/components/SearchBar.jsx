@@ -109,12 +109,24 @@ export default function SearchBar() {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
         />
-        <IconButton
-          onClick={() => alert("Search icon clicked!")}
-          sx={{ color: "white" }}
-        >
-          <SearchIcon />
-        </IconButton>
+        <Box sx={{ width: "40px", display: "flex", justifyContent: "center" }}>
+          {loading ? (
+            <CircularProgress color="inherit" size={20} />
+          ) : (
+            <IconButton
+              onClick={() =>
+                navigate("/", {
+                  state: { results, query },
+                  replace: true,
+                })
+              }
+              sx={{ color: "white" }}
+              disabled={loading} // Disable if loading or no results
+            >
+              <SearchIcon />
+            </IconButton>
+          )}
+        </Box>
       </SearchContainer>
 
       {loading && (
