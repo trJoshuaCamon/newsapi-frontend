@@ -23,6 +23,8 @@ const stackProps = {
   alignItems: "center",
 };
 
+const BACKEND_BASE_URL = import.meta.env.VITE_BACKEND_BASE_URL;
+
 const img_placeholder =
   "https://community.softr.io/uploads/db9110/original/2X/7/74e6e7e382d0ff5d7773ca9a87e6f6f8817a68a6.jpeg";
 
@@ -31,6 +33,10 @@ const COOKIE_NAME = "news_articles";
 const ViewPost = () => {
   const location = useLocation();
   const [content, setContent] = React.useState(null);
+
+  const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState(false);
+
   const { id, category } = useParams();
 
   // First, check if the article is available in location.state
@@ -49,13 +55,21 @@ const ViewPost = () => {
   }
 
   useEffect(() => {
+    setLoading(true);
+    setError(false);
+
     // Fetch article content
     fetch(
-      "http://localhost:5000/article?url=" + encodeURIComponent(article.url)
+      `${BACKEND_BASE_URL}/api/article?url=${encodeURIComponent(article.url)}`
     )
       .then((res) => res.json())
       .then((data) => {
         const rawContent = data.content;
+
+        if (!rawContent) {
+          setError(true);
+          return;
+        }
 
         // Clean up the fetched content
         const cleanContent = rawContent
@@ -66,7 +80,13 @@ const ViewPost = () => {
 
         setContent(cleanContent); // Update state with cleaned content
       })
-      .catch((error) => console.error("Error fetching article:", error));
+      .catch((error) => {
+        console.error("Error fetching article:", error);
+        setError(true);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, [article.url]); // Only re-run when article.url changes
 
   const formattedDate = new Date(article.publishedAt).toLocaleDateString(
@@ -83,11 +103,10 @@ const ViewPost = () => {
   );
 
   fetch(
-    "http://localhost:5000/article?url=" + encodeURIComponent(article.url)
+    `${BACKEND_BASE_URL}/api/article?url=` + encodeURIComponent(article.url)
   ).then((res) => res.json());
 
   if (!article) {
-    // Check if article is null or undefined
     return (
       <Box {...stackProps}>
         <Typography variant="h6">Article not found</Typography>
@@ -102,7 +121,6 @@ const ViewPost = () => {
         {/* Left side: Image */}
         <Grid
           margin={"auto"}
-          item
           sx={{
             width: "100%",
             maxWidth: { xs: "100%", md: "80%" },
@@ -132,13 +150,14 @@ const ViewPost = () => {
         </Grid>
 
         {/* Right side: Text content */}
-        <Grid item xs={12} md={6}>
+        <Grid>
           <Typography variant="h3" gutterBottom>
             {article.title}
           </Typography>
 
           <Typography variant="h6" color="text.secondary" gutterBottom>
-            By {article.author} | Published on {formattedDate}
+            By {article.author || "Unknown Author"} | Published on{" "}
+            {formattedDate}
           </Typography>
 
           <Typography variant="body2" color="text.secondary" gutterBottom>
@@ -148,20 +167,27 @@ const ViewPost = () => {
             </a>
           </Typography>
 
-          {/* <Typography variant="body1" paragraph>
-            {article.description}
-          </Typography> */}
-
-          <Typography
-            variant="body2"
-            sx={{
-              whiteSpace: "pre-wrap",
-              marginTop: "50px",
-              textIndent: "3.5em",
-            }}
-          >
-            {content ? content : "No description available."}
-          </Typography>
+          <Box sx={{ marginTop: "50px" }}>
+            {loading ? (
+              <CircularProgress sx={{ display: "block", margin: "0 auto" }} />
+            ) : content ? (
+              <Typography
+                variant="body2"
+                sx={{
+                  whiteSpace: "pre-wrap",
+                  textIndent: "3.5em",
+                }}
+              >
+                {content}
+              </Typography>
+            ) : (
+              <Typography variant="body2" color="text.secondary">
+                {error
+                  ? "Failed to load article content."
+                  : "No description available."}
+              </Typography>
+            )}
+          </Box>
         </Grid>
       </Grid>
     </Box>

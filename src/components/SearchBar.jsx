@@ -13,7 +13,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import { useNavigate } from "react-router-dom";
 
 const API_KEY = import.meta.env.VITE_NEWS_API_KEY;
-const API_URL = "https://newsapi.org/v2/everything";
+const BACKEND_BASE_URL = import.meta.env.VITE_BACKEND_BASE_URL;
 
 const SearchContainer = styled("div")(({ theme }) => ({
   display: "flex",
@@ -62,8 +62,13 @@ export default function SearchBar() {
       setLoading(true);
       try {
         const response = await fetch(
-          `${API_URL}?q=${encodeURIComponent(query)}&apiKey=${API_KEY}`
+          `${BACKEND_BASE_URL}/api/searchNews?q=${encodeURIComponent(query)}`
         );
+
+        if (!response.ok) {
+          throw new Error("Error fetching data from server");
+        }
+
         const data = await response.json();
         setResults(data.articles || []);
       } catch (error) {

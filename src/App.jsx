@@ -13,31 +13,9 @@ import MainContent from "./components/MainContent";
 import Sidebar from "./components/Sidebar";
 import { Category } from "@mui/icons-material";
 
-const API_KEY = import.meta.env.VITE_NEWS_API_KEY;
+const BACKEND_BASE_URL = import.meta.env.VITE_BACKEND_BASE_URL;
 const PAGE_SIZE = 100;
 const COUNTRY = "us";
-
-const categories = [
-  "business",
-  "entertainment",
-  "general",
-  "health",
-  "science",
-  "sports",
-  "technology",
-];
-
-// Default
-const topHeadline_URL = `https://newsapi.org/v2/top-headlines?country=${COUNTRY}&pageSize=${PAGE_SIZE}&apiKey=${API_KEY}`;
-
-// Category URLs
-const URL_business = `https://newsapi.org/v2/top-headlines?category=${categories[0]}&country=${COUNTRY}&pageSize=${PAGE_SIZE}&apiKey=${API_KEY}`;
-const URL_entertainment = `https://newsapi.org/v2/top-headlines?category=${categories[1]}&country=${COUNTRY}&pageSize=${PAGE_SIZE}&apiKey=${API_KEY}`;
-const URL_general = `https://newsapi.org/v2/top-headlines?category=${categories[2]}&country=${COUNTRY}&pageSize=${PAGE_SIZE}&apiKey=${API_KEY}`;
-const URL_health = `https://newsapi.org/v2/top-headlines?category=${categories[3]}&country=${COUNTRY}&pageSize=${PAGE_SIZE}&apiKey=${API_KEY}`;
-const URL_science = `https://newsapi.org/v2/top-headlines?category=${categories[4]}&country=${COUNTRY}&pageSize=${PAGE_SIZE}&apiKey=${API_KEY}`;
-const URL_sports = `https://newsapi.org/v2/top-headlines?category=${categories[5]}&country=${COUNTRY}&pageSize=${PAGE_SIZE}&apiKey=${API_KEY}`;
-const URL_technology = `https://newsapi.org/v2/top-headlines?category=${categories[6]}&country=${COUNTRY}&pageSize=${PAGE_SIZE}&apiKey=${API_KEY}`;
 
 const COOKIE_NAME = "news_articles";
 const COOKIE_EXPIRATION_MINUTES = 10;
@@ -48,6 +26,7 @@ export default function App() {
     const storedTheme = localStorage.getItem("themeMode");
     return storedTheme ? JSON.parse(storedTheme) : prefersDarkMode;
   });
+
   const hasFetched = useRef(false); // Track whether API call has run
   const [articles, setArticles] = useState({
     topHeadlines: [],
@@ -70,81 +49,50 @@ export default function App() {
       try {
         const storedData = JSON.parse(localStorage.getItem(COOKIE_NAME));
         if (storedData) {
-          setArticles(storedData); // Directly parse and set state
+          setArticles(storedData);
           console.log("Data found in localStorage:", storedData);
           setLoading(false);
-
-          return; // Stop execution if data is found in localStorage
+          return;
         }
 
-        const responseTopHeadlines = await fetch(topHeadline_URL);
+        const categoriesToFetch = [
+          "topHeadlines",
+          "business",
+          "entertainment",
+          "general",
+          "health",
+          "science",
+          "sports",
+          "technology",
+        ];
 
-        // Fetch data for each category
-        const responseBusiness = await fetch(URL_business);
-        const responseEntertainment = await fetch(URL_entertainment);
-        const responseGeneral = await fetch(URL_general);
-        const responseHealth = await fetch(URL_health);
-        const responseScience = await fetch(URL_science);
-        const responseSports = await fetch(URL_sports);
-        const responseTechnology = await fetch(URL_technology);
-
-        // Check if all responses are successful
-        if (
-          !responseTopHeadlines.ok ||
-          !responseBusiness.ok ||
-          !responseEntertainment.ok ||
-          !responseGeneral.ok ||
-          !responseHealth.ok ||
-          !responseScience.ok ||
-          !responseSports.ok ||
-          !responseTechnology.ok
-        ) {
-          throw new Error("Failed to fetch articles");
-        }
-
-        const dataTopHeadlines = await responseTopHeadlines.json();
-
-        // Parse the data from each response
-        const dataBusiness = await responseBusiness.json();
-        const dataEntertainment = await responseEntertainment.json();
-        const dataGeneral = await responseGeneral.json();
-        const dataHealth = await responseHealth.json();
-        const dataScience = await responseScience.json();
-        const dataSports = await responseSports.json();
-        const dataTechnology = await responseTechnology.json();
-
-        // Add IDs to articles
-        const addIdsToArticles = (articles, category) => {
-          return articles.map((article, index) => ({
+        const fetchCategory = async (category) => {
+          const res = await fetch(`${BACKEND_BASE_URL}api/news/${category}`);
+          if (!res.ok) throw new Error(`Failed to fetch ${category}`);
+          const data = await res.json();
+          return data.map((article, index) => ({
             ...article,
-            articleID: `${index + 1}`, // Unique ID within the category
-            category: category, // Explicitly set the category
+            articleID: `${index + 1}`,
+            category,
           }));
         };
 
-        const fetchedArticles = {
-          topHeadlines: addIdsToArticles(
-            dataTopHeadlines.articles,
-            "topHeadlines"
-          ),
-          business: addIdsToArticles(dataBusiness.articles, "business"),
-          entertainment: addIdsToArticles(
-            dataEntertainment.articles,
-            "entertainment"
-          ),
-          general: addIdsToArticles(dataGeneral.articles, "general"),
-          health: addIdsToArticles(dataHealth.articles, "health"),
-          science: addIdsToArticles(dataScience.articles, "science"),
-          sports: addIdsToArticles(dataSports.articles, "sports"),
-          technology: addIdsToArticles(dataTechnology.articles, "technology"),
-        };
+        const results = await Promise.all(
+          categoriesToFetch.map((category) => fetchCategory(category))
+        );
+
+        const fetchedArticles = categoriesToFetch.reduce(
+          (acc, category, index) => {
+            acc[category] = results[index];
+            return acc;
+          },
+          {}
+        );
 
         localStorage.setItem(COOKIE_NAME, JSON.stringify(fetchedArticles));
         console.log("Data saved to localStorage:", fetchedArticles);
 
-        // Set the articles with IDs for each category
         setArticles(fetchedArticles);
-
         setLoading(false);
       } catch (error) {
         setError(error.message);
