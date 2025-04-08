@@ -27,6 +27,8 @@ export default function App() {
     return storedTheme ? JSON.parse(storedTheme) : prefersDarkMode;
   });
 
+  console.log(import.meta.env.VITE_BACKEND_BASE_URL);
+
   const hasFetched = useRef(false); // Track whether API call has run
   const [articles, setArticles] = useState({
     topHeadlines: [],
