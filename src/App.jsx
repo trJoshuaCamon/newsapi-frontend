@@ -67,7 +67,7 @@ export default function App() {
         ];
 
         const fetchCategory = async (category) => {
-          const res = await fetch(`${BACKEND_BASE_URL}api/news/${category}`);
+          const res = await fetch(`${BACKEND_BASE_URL}/api/news/${category}`);
           if (!res.ok) throw new Error(`Failed to fetch ${category}`);
           const data = await res.json();
           return data.map((article, index) => ({
