@@ -200,6 +200,7 @@ export default function App() {
                 position: isMdScreen ? "static" : "sticky",
                 top: "70px",
                 height: "100vh",
+                paddingBottom: "100px",
               }}
             >
               <Sidebar allArticles={allArticles} />

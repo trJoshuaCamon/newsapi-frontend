@@ -1,22 +1,14 @@
 import React from "react";
-import { Box, Typography, Button } from "@mui/material";
+import { Box, Typography, Button, Paper, List } from "@mui/material";
 import TopHeadlinesSidebar from "./TopHeadlinesSidebar";
+import StockMarketWidget from "./StockMarketWidget";
 
 const Sidebar = ({ allArticles }) => {
   return (
-    <Box>
-      {/* <Typography variant="h5" gutterBottom>
-        Sidebar
-      </Typography>
-
-      <Typography variant="body2" paragraph>
-        Add widgets, filters, or other interactive content here.
-      </Typography>
-
-      <Button variant="contained" color="primary">
-        Example Button
-      </Button> */}
+    <Box sx={{ overflow: "auto" }}>
       <TopHeadlinesSidebar allArticles={allArticles} />
+
+      <StockMarketWidget />
     </Box>
   );
 };
