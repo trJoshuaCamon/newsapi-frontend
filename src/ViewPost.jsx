@@ -28,7 +28,7 @@ const BACKEND_BASE_URL = import.meta.env.VITE_BACKEND_BASE_URL;
 const img_placeholder =
   "https://community.softr.io/uploads/db9110/original/2X/7/74e6e7e382d0ff5d7773ca9a87e6f6f8817a68a6.jpeg";
 
-const COOKIE_NAME = "news_articles";
+const STORAGE_NAME = "news_articles";
 
 const ViewPost = () => {
   const location = useLocation();
@@ -44,7 +44,7 @@ const ViewPost = () => {
 
   // If no article is found in location.state, fall back to localStorage
   if (!article) {
-    const storedData = JSON.parse(localStorage.getItem(COOKIE_NAME));
+    const storedData = JSON.parse(localStorage.getItem(STORAGE_NAME));
 
     if (storedData && storedData[category] && id) {
       // Directly access the correct category and find the article by ID

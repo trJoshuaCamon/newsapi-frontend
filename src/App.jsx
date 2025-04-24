@@ -11,14 +11,10 @@ import Navbar from "./components/Navbar";
 import "./App.css";
 import MainContent from "./components/MainContent";
 import Sidebar from "./components/Sidebar";
-import { Category } from "@mui/icons-material";
 
 const BACKEND_BASE_URL = import.meta.env.VITE_BACKEND_BASE_URL;
-const PAGE_SIZE = 100;
-const COUNTRY = "us";
 
-const COOKIE_NAME = "news_articles";
-const COOKIE_EXPIRATION_MINUTES = 10;
+const STORAGE_NAME = "news_articles";
 
 export default function App() {
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
@@ -36,7 +32,7 @@ export default function App() {
     entertainment: [],
     general: [],
     health: [],
-    science: [],
+    // science: [],
     sports: [],
     technology: [],
   });
@@ -49,7 +45,7 @@ export default function App() {
 
     const fetchData = async () => {
       try {
-        const storedData = JSON.parse(localStorage.getItem(COOKIE_NAME));
+        const storedData = JSON.parse(localStorage.getItem(STORAGE_NAME));
         if (storedData) {
           setArticles(storedData);
           console.log("Data found in localStorage:", storedData);
@@ -63,7 +59,7 @@ export default function App() {
           "entertainment",
           "general",
           "health",
-          "science",
+          // "science",
           "sports",
           "technology",
         ];
@@ -91,7 +87,7 @@ export default function App() {
           {}
         );
 
-        localStorage.setItem(COOKIE_NAME, JSON.stringify(fetchedArticles));
+        localStorage.setItem(STORAGE_NAME, JSON.stringify(fetchedArticles));
         console.log("Data saved to localStorage:", fetchedArticles);
 
         setArticles(fetchedArticles);
@@ -139,7 +135,7 @@ export default function App() {
     entertainment: articles.entertainment,
     general: articles.general,
     health: articles.health,
-    science: articles.science,
+    // science: articles.science,
     sports: articles.sports,
     technology: articles.technology,
   };
