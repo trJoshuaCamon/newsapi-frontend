@@ -22,7 +22,7 @@ const pages = [
   "Entertainment",
   "General",
   "Health",
-  "Science",
+  // "Science",
   "Sports",
   "Technology",
 ];

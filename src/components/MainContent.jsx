@@ -118,10 +118,10 @@ const MainContent = ({ allArticles }) => {
 
       <Divider />
 
-      <Box id="Science">
+      {/* <Box id="Science">
         <NewsCarousel label="Science" passedArticles={allArticles.science} />
       </Box>
-      <Divider />
+      <Divider /> */}
 
       <Box id="Sports">
         <NewsCarousel label="Sports" passedArticles={allArticles.sports} />
