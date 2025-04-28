@@ -70,11 +70,6 @@ const ZodiacWidget = () => {
     fetchZodiacData(zodiacData.sign);
   }, [zodiacData.sign]);
 
-  // Refresh the horoscope data
-  const refreshHoroscope = () => {
-    fetchZodiacData(zodiacData.sign);
-  };
-
   return (
     <Box sx={{ width: "100%", maxWidth: 400, margin: "auto", mb: 4 }}>
       <Card sx={{ borderRadius: 3, boxShadow: 3 }}>
