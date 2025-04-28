@@ -1,12 +1,104 @@
-# React + Vite
+---
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## NewsAPI Project
 
-Currently, two official plugins are available:
+### Project Description
+This project provides a full-stack application that allows users to get real-time news, weather updates, stock market data, and zodiac horoscopes. The frontend is built using React, with the backend serving API data, including articles, weather, stock quotes, and more.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Features
+- **Market Overview (Stocks Widget)**: Displays live stock data and includes caching for better performance.
+- **Improved UI**: Redesigned user interface for a more modern and streamlined experience.
+- **Continuous Scrolling with Lazy Loading**: News articles and other data are fetched progressively as the user scrolls down, improving performance and user experience.
+- **Location-based Weather**: Uses the device's location to fetch weather updates specific to that location.
+- **Full Article Scraping**: Full scraped articles are cached for quick loading and repeated access.
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Frontend Setup
+
+### Requirements
+
+- Node.js (v18+ recommended)
+- npm or yarn
+
+### Installation
+
+1. Clone the frontend repository:
+
+   ```bash
+   git clone https://github.com/trJoshuaCamon/newsapi-frontend.git
+   cd newsapi-frontend
+   ```
+
+2. Install the dependencies:
+
+   ```bash
+   npm install
+   ```
+
+3. Run the development server:
+
+   ```bash
+   npm run dev
+   ```
+
+4. Open your browser and go to `http://localhost:3000` to view the app.
+
+### Running the app in production mode
+
+1. Build the app:
+
+   ```bash
+   npm run build
+   ```
+
+2. Preview the production build:
+   ```bash
+   npm run preview
+   ```
+
+---
+
+## Backend Setup
+
+### Requirements
+
+- Node.js (v18+ recommended)
+
+### Installation
+
+1. Clone the backend repository:
+
+   ```bash
+   git clone https://github.com/trJoshuaCamon/newsapi-backend.git
+   cd newsapi-backend
+   ```
+
+2. Install the dependencies:
+
+   ```bash
+   npm install
+   ```
+
+3. Start the backend server:
+
+   ```bash
+   npm start
+   ```
+
+4. The backend server will be running at `http://localhost:4000`.
+
+---
+
+## Notes
+
+- Ensure that both the frontend and backend are running concurrently for the application to work.
+- You can modify the environment variables in the `.env` file for customizing API keys and settings.
+
+---
+
+## License
+
+This project is licensed under the MIT License.
+
+---
